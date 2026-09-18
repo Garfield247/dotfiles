@@ -32,6 +32,7 @@ link_path() {
 
 link_path "$DOTFILES/tmux/.tmux.conf" "$HOME/.tmux.conf"
 link_path "$DOTFILES/zsh/.zshrc" "$HOME/.zshrc"
+link_path "$DOTFILES/zsh/.zimrc" "$HOME/.zimrc"
 link_path "$DOTFILES/zsh/.mbprc" "$HOME/.mbprc"
 link_path "$DOTFILES/kitty" "$HOME/.config/kitty"
 link_path "$DOTFILES/yazi" "$HOME/.config/yazi"

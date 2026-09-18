@@ -14,7 +14,9 @@ if command -v pyenv >/dev/null 2>&1; then
   export PYENV_ROOT="${HOME}/.pyenv"
   path=("${PYENV_ROOT}/bin" $path)
   eval "$(pyenv init -)"
-  eval "$(pyenv virtualenv-init -)"
+  if pyenv commands 2>/dev/null | grep -qx "virtualenv-init"; then
+    eval "$(pyenv virtualenv-init -)"
+  fi
 fi
 export PYTHON_CONFIGURE_OPTS="--enable-framework"
 
@@ -24,19 +26,20 @@ for dir in \
   "/usr/local/opt/icu4c/bin" \
   "/usr/local/opt/icu4c/sbin" \
   "/usr/local/opt/curl/bin" \
-  "/usr/local/sbin"
+  "/usr/local/bin" \
+  "/usr/local/sbin" \
+  "${HOME}/.local/bin"
 do
   [[ -d "${dir}" ]] && path+=("${dir}")
 done
 unset dir
 
-if [[ -r /opt/homebrew/etc/profile.d/autojump.sh ]]; then
-  source /opt/homebrew/etc/profile.d/autojump.sh
-elif command -v brew >/dev/null 2>&1; then
-  autojump_sh="$(brew --prefix)/etc/profile.d/autojump.sh"
-  [[ -r "${autojump_sh}" ]] && source "${autojump_sh}"
-  unset autojump_sh
-fi
+# ---------------------
+# 目录快速跳转 (zsh-z)
+# ---------------------
+alias j='z'
+compdef _zshz j 2>/dev/null || true
+
 
 # ---------------------
 # 语言环境
@@ -60,6 +63,13 @@ alias nv="nvim"
 # -------------
 # Shell 别名
 # -------------
+
+alias ll="ls -lh"
+alias la="ls -lah"
+alias l="ls -lh"
+alias ..="cd .."
+alias ...="cd ../.."
+alias grep="grep --color=auto"
 
 alias ra="ranger"
 alias lgt="lazygit"

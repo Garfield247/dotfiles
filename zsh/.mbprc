@@ -110,6 +110,7 @@ alias f="fuck"
 
 alias cdgemini="cd ${HOME}/.gemini"
 alias cdai="cd ${HOME}/Documents/ai"
+alias cdskills="cd ${HOME}/Documents/ai/skills"
 alias gemini-st="git -C ${HOME}/.gemini status -sb"
 alias gemini-pull="git -C ${HOME}/.gemini pull --rebase origin main"
 alias gemini-push='git -C ${HOME}/.gemini add . && (git -C ${HOME}/.gemini diff --cached --quiet || git -C ${HOME}/.gemini commit -m "chore: 同步配置 $(date +"%Y-%m-%d %H:%M:%S")") && git -C ${HOME}/.gemini push origin main'

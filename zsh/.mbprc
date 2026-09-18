@@ -63,6 +63,7 @@ alias nv="nvim"
 
 alias ra="ranger"
 alias lgt="lazygit"
+alias ldk="lazydocker"
 
 alias py="python"
 alias py2="python2"
@@ -92,6 +93,38 @@ alias chrome="open -a /Applications/Google\\ Chrome.app"
 
 # thefuck
 alias f="fuck"
+
+# -----------------------------
+# Gemini AI Agent 配置与双机同步
+# -----------------------------
+
+alias cdgemini="cd ${HOME}/.gemini"
+alias gemini-st="git -C ${HOME}/.gemini status -sb"
+alias gemini-pull="git -C ${HOME}/.gemini pull --rebase origin main"
+alias gemini-push='git -C ${HOME}/.gemini add . && (git -C ${HOME}/.gemini diff --cached --quiet || git -C ${HOME}/.gemini commit -m "chore: 同步配置 $(date +"%Y-%m-%d %H:%M:%S")") && git -C ${HOME}/.gemini push origin main'
+
+gemini-sync() {
+  local gemini_dir="${HOME}/.gemini"
+  if [[ ! -d "${gemini_dir}/.git" ]]; then
+    printf "\033[31m[Gemini Sync]\033[0m %s 尚未初始化 git 仓库\n" "${gemini_dir}"
+    return 1
+  fi
+  printf "\033[36m[Gemini Sync]\033[0m 正在拉取远端配置 (pull --rebase)...\n"
+  git -C "${gemini_dir}" pull --rebase origin main || {
+    printf "\033[31m[Gemini Sync]\033[0m 拉取遇到冲突，请先手动排查处理！\n"
+    return 1
+  }
+  git -C "${gemini_dir}" add .
+  if ! git -C "${gemini_dir}" diff --cached --quiet; then
+    local commit_msg="chore: 同步配置 ($(date +'%Y-%m-%d %H:%M:%S'))"
+    git -C "${gemini_dir}" commit -m "${commit_msg}"
+    printf "\033[32m[Gemini Sync]\033[0m 本地变更已提交: %s\n" "${commit_msg}"
+  else
+    printf "\033[33m[Gemini Sync]\033[0m 本地无新文件变更\n"
+  fi
+  printf "\033[36m[Gemini Sync]\033[0m 正在推送到 GitHub 远端...\n"
+  git -C "${gemini_dir}" push origin main && printf "\033[32m[Gemini Sync]\033[0m 双机配置同步完成！\n"
+}
 
 # --------------------
 # 敏感信息和本地配置
